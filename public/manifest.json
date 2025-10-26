@@ -2,12 +2,13 @@
   "name": "TeddyKids Teacher Reporting",
   "short_name": "TeddyKids",
   "description": "Teacher reporting app for TeddyKids daycare centers",
-  "start_url": "/",
+  "start_url": "https://log.teddykids.nl/",
+  "id": "https://log.teddykids.nl/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#FF6B6B",
   "orientation": "portrait-primary",
-  "scope": "/",
+  "scope": "https://log.teddykids.nl/",
   "lang": "en",
   "icons": [
     {
