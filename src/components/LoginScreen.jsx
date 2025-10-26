@@ -3,12 +3,11 @@ import useStore from '../lib/store'
 import { User, Lock, AlertCircle } from 'lucide-react'
 
 const teachers = [
+  'Adela',
+  'Christina',
   'Hanrike',
-  'Sofia', 
   'Meral',
-  'Anna',
-  'Lisa',
-  'Emma'
+  'Sofia'
 ]
 
 function LoginScreen() {
@@ -77,16 +76,22 @@ function LoginScreen() {
             <User size={20} />
             Select Your Name
           </label>
-          <select
-            value={selectedTeacher}
-            onChange={(e) => setSelectedTeacher(e.target.value)}
-            className="input-field text-lg"
-          >
-            <option value="">Choose teacher...</option>
+          <div className="grid grid-cols-2 gap-3">
             {teachers.map(teacher => (
-              <option key={teacher} value={teacher}>{teacher}</option>
+              <button
+                key={teacher}
+                onClick={() => setSelectedTeacher(teacher)}
+                className={`p-4 rounded-xl text-lg font-semibold transition-all shadow-md
+                          active:scale-95 ${
+                  selectedTeacher === teacher
+                    ? 'bg-pink-500 text-white border-2 border-pink-600'
+                    : 'bg-blue-500 text-white border-2 border-blue-600 hover:bg-blue-600'
+                }`}
+              >
+                {teacher}
+              </button>
             ))}
-          </select>
+          </div>
         </div>
         
         {/* PIN Display */}
