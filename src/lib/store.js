@@ -238,10 +238,10 @@ const useStore = create(
       },
 
       initializeDateWatcher: () => {
-        // Check for midnight transition every minute
+        // Check for midnight transition every hour
         setInterval(() => {
           get().checkMidnightTransition()
-        }, 60000) // Check every minute
+        }, 3600000) // Check every hour (3600000ms)
 
         // Also check immediately
         get().checkMidnightTransition()
