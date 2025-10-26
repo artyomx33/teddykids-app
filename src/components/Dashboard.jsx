@@ -7,14 +7,17 @@ import { Calendar, Save, LogOut, CheckCircle, Clock } from 'lucide-react'
 import { format } from 'date-fns'
 
 function Dashboard() {
-  const { 
-    teacher, 
-    activeTab, 
-    setActiveTab, 
-    saveProgress, 
+  const {
+    teacher,
+    activeTab,
+    setActiveTab,
+    saveProgress,
     logout,
     isSaving,
-    lastSaved 
+    lastSaved,
+    currentDate,
+    canEditToday,
+    isCurrentDay
   } = useStore()
   
   const [showSuccess, setShowSuccess] = useState(false)
@@ -44,7 +47,17 @@ function Dashboard() {
                 Hi, {teacher.name}! 👋
               </h1>
               <p className="text-sm text-gray-600">
-                {format(new Date(), 'EEEE, MMM d')}
+                {format(currentDate, 'EEEE, MMM d, yyyy')}
+                {!isCurrentDay() && (
+                  <span className="ml-2 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">
+                    📅 Past Day
+                  </span>
+                )}
+                {isCurrentDay() && (
+                  <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                    ✅ Today
+                  </span>
+                )}
               </p>
             </div>
             <button
@@ -80,6 +93,23 @@ function Dashboard() {
             Last saved: {format(new Date(lastSaved), 'HH:mm')}
           </div>
         )}
+
+        {/* Midnight status notification */}
+        {!canEditToday() && (
+          <div className="px-4 pb-2">
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+              <div className="flex items-center gap-2 text-orange-700">
+                <Clock size={16} />
+                <span className="text-sm font-medium">
+                  📅 This is a past day's report (read-only)
+                </span>
+              </div>
+              <p className="text-xs text-orange-600 mt-1">
+                Data is automatically saved and locked at midnight each day.
+              </p>
+            </div>
+          </div>
+        )}
       </header>
       
       {/* Success Message */}
@@ -94,22 +124,31 @@ function Dashboard() {
       
       {/* Content */}
       <main className="px-4 py-4 pb-24">
-        {activeTab === 'daily' && <DailyTasks />}
-        {activeTab === 'weekly' && <WeeklyTasks />}
-        {activeTab === 'monthly' && <MonthlyTasks />}
+        {activeTab === 'daily' && <DailyTasks canEdit={canEditToday()} />}
+        {activeTab === 'weekly' && <WeeklyTasks canEdit={canEditToday()} />}
+        {activeTab === 'monthly' && <MonthlyTasks canEdit={canEditToday()} />}
       </main>
       
       {/* Fixed Save Button */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 pb-8">
         <button
           onClick={handleSave}
-          disabled={isSaving}
-          className="w-full btn-primary flex items-center justify-center gap-2"
+          disabled={isSaving || !canEditToday()}
+          className={`w-full flex items-center justify-center gap-2 ${
+            canEditToday()
+              ? 'btn-primary'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
         >
           {isSaving ? (
             <>
               <div className="animate-spin">⟳</div>
               <span>Saving...</span>
+            </>
+          ) : !canEditToday() ? (
+            <>
+              <Clock size={20} />
+              <span>Past Day (Read-Only)</span>
             </>
           ) : (
             <>

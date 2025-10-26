@@ -9,13 +9,17 @@ const useStore = create(
       // Auth state
       teacher: null,
       isAuthenticated: false,
-      
+
       // Current report data
       currentDate: new Date(),
       dailyTasks: {},
       weeklyTasks: {},
       monthlyTasks: {},
-      
+
+      // Date management
+      isDateLocked: false,
+      lastDateCheck: new Date(),
+
       // UI state
       activeTab: 'daily',
       isSaving: false,
@@ -35,15 +39,18 @@ const useStore = create(
             return { success: false, error: 'Invalid credentials' }
           }
           
-          set({ 
-            teacher: data, 
+          set({
+            teacher: data,
             isAuthenticated: true,
             currentDate: new Date()
           })
-          
+
+          // Initialize date watcher for midnight transitions
+          get().initializeDateWatcher()
+
           // Load existing data for today
           await get().loadTodayData()
-          
+
           return { success: true }
         } catch (err) {
           return { success: false, error: err.message }
@@ -193,7 +200,65 @@ const useStore = create(
       
       // UI actions
       setActiveTab: (tab) => set({ activeTab: tab }),
-      
+
+      // Date management and midnight cutoff
+      checkMidnightTransition: () => {
+        const state = get()
+        const now = new Date()
+        const currentDateStr = format(state.currentDate, 'yyyy-MM-dd')
+        const todayStr = format(now, 'yyyy-MM-dd')
+
+        // If the date has changed (passed midnight)
+        if (currentDateStr !== todayStr) {
+          console.log('Midnight transition detected:', currentDateStr, '->', todayStr)
+
+          // Save current progress before transitioning
+          if (state.isAuthenticated) {
+            state.saveProgress()
+          }
+
+          // Reset to new day
+          set({
+            currentDate: now,
+            dailyTasks: {}, // Clear daily tasks for new day
+            isDateLocked: false,
+            lastDateCheck: now
+          })
+
+          // Load any existing data for the new day
+          if (state.isAuthenticated) {
+            state.loadTodayData()
+          }
+
+          return true // Date changed
+        }
+
+        set({ lastDateCheck: now })
+        return false // No change
+      },
+
+      initializeDateWatcher: () => {
+        // Check for midnight transition every minute
+        setInterval(() => {
+          get().checkMidnightTransition()
+        }, 60000) // Check every minute
+
+        // Also check immediately
+        get().checkMidnightTransition()
+      },
+
+      isCurrentDay: () => {
+        const state = get()
+        const currentDateStr = format(state.currentDate, 'yyyy-MM-dd')
+        const todayStr = format(new Date(), 'yyyy-MM-dd')
+        return currentDateStr === todayStr
+      },
+
+      canEditToday: () => {
+        const state = get()
+        return state.isCurrentDay() && !state.isDateLocked
+      },
+
       // Photo upload
       uploadPhoto: async (file, taskId, reportType) => {
         const state = get()
