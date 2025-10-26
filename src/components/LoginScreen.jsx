@@ -65,7 +65,7 @@ function LoginScreen() {
         <div className="text-center mb-8 animate-fade-in">
           <div className="w-24 h-24 mx-auto mb-4">
             <img
-              src="/teddykids-logo.png"
+              src="/teddy kids logo 256x256.jpg"
               alt="TeddyKids Logo"
               className="w-full h-full object-contain"
             />
