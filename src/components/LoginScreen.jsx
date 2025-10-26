@@ -63,8 +63,12 @@ function LoginScreen() {
       <div className="flex flex-col items-center justify-center min-h-screen px-6 py-12">
         {/* Logo/Title */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="w-24 h-24 mx-auto mb-4 bg-teddy-red rounded-full flex items-center justify-center">
-            <span className="text-4xl">🧸</span>
+          <div className="w-24 h-24 mx-auto mb-4">
+            <img
+              src="/teddykids-logo.png"
+              alt="TeddyKids Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
           <h1 className="text-3xl font-bold text-gray-800">TeddyKids</h1>
           <p className="text-gray-600 mt-1">Teacher Reporting</p>
