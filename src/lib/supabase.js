@@ -54,5 +54,5 @@ INSERT INTO teachers (name, pin, sites, role) VALUES
   ('Hanrike', '7896', ARRAY['RB3', 'RB5'], 'teacher'),
   ('Meral', '2580', ARRAY['RB5'], 'teacher'),
   ('Sofia', '0852', ARRAY['RB3'], 'teacher'),
-  ('Teddy', '3333', ARRAY['RB3', 'RB5'], 'admin');
+  ('Teddy', '3355', ARRAY['RB3', 'RB5'], 'admin');
 */
