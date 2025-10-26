@@ -7,7 +7,8 @@ const teachers = [
   'Christina',
   'Hanrike',
   'Meral',
-  'Sofia'
+  'Sofia',
+  'Teddy'
 ]
 
 function LoginScreen() {
