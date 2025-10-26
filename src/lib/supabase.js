@@ -21,6 +21,7 @@ CREATE TABLE teachers (
   name TEXT NOT NULL UNIQUE,
   pin TEXT NOT NULL,
   sites TEXT[] DEFAULT '{}',
+  role TEXT DEFAULT 'teacher', -- 'teacher' or 'admin'
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -47,10 +48,11 @@ CREATE TABLE evidence (
 );
 
 -- Insert sample teachers
-INSERT INTO teachers (name, pin, sites) VALUES
-  ('Adela', '1470', ARRAY['RB3', 'RB5']),
-  ('Christina', '1236', ARRAY['RB3']),
-  ('Hanrike', '7896', ARRAY['RB3', 'RB5']),
-  ('Meral', '2580', ARRAY['RB5']),
-  ('Sofia', '0852', ARRAY['RB3']);
+INSERT INTO teachers (name, pin, sites, role) VALUES
+  ('Adela', '1470', ARRAY['RB3', 'RB5'], 'teacher'),
+  ('Christina', '1236', ARRAY['RB3'], 'teacher'),
+  ('Hanrike', '7896', ARRAY['RB3', 'RB5'], 'teacher'),
+  ('Meral', '2580', ARRAY['RB5'], 'teacher'),
+  ('Sofia', '0852', ARRAY['RB3'], 'teacher'),
+  ('Teddy', '3333', ARRAY['RB3', 'RB5'], 'admin');
 */

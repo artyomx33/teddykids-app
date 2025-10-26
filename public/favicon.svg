@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <style>
+      .c { fill: #00bcd4; }
+      .p { fill: #e91e63; }
+      .w { fill: white; }
+    </style>
+  </defs>
+
+  <!-- Simplified circular logo for favicon -->
+  <circle cx="16" cy="16" r="15" class="w"/>
+  <circle cx="16" cy="16" r="15" fill="none" stroke="#00bcd4" stroke-width="2"/>
+
+  <!-- Simplified TK text -->
+  <text x="7" y="19" font-family="Arial,sans-serif" font-size="12" font-weight="bold" class="p">T</text>
+  <text x="24" y="19" font-family="Arial,sans-serif" font-size="12" font-weight="bold" class="c">K</text>
+
+  <!-- Two dots representing children -->
+  <circle cx="10" cy="10" r="2" class="p"/>
+  <circle cx="22" cy="10" r="2" class="c"/>
+</svg>
