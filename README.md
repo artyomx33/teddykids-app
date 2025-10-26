@@ -68,9 +68,9 @@ CREATE TABLE evidence (
 
 -- Insert sample teachers
 INSERT INTO teachers (name, pin, sites) VALUES
-  ('Hanrike', '1234', ARRAY['RB3', 'RB5']),
-  ('Sofia', '5678', ARRAY['RB3']),
-  ('Meral', '9012', ARRAY['RB5']);
+  ('Hanrike', 'XXXX', ARRAY['RB3', 'RB5']),
+  ('Sofia', 'XXXX', ARRAY['RB3']),
+  ('Meral', 'XXXX', ARRAY['RB5']);
 ```
 
 3. Create a storage bucket called `evidence` (public)
