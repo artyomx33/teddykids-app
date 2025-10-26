@@ -1,0 +1,296 @@
+import useStore from '../lib/store'
+import { Check, Camera, MessageSquare, Users, Shield, ClipboardList, AlertCircle } from 'lucide-react'
+
+const protocols = [
+  { id: 'pickup_id', label: 'Pick-up ID Check', icon: Shield },
+  { id: 'medication', label: 'Medication Handover', icon: AlertCircle },
+  { id: 'incident', label: 'Incident Logging', icon: ClipboardList },
+  { id: 'safeguarding', label: 'Safeguarding Path', icon: Shield },
+  { id: 'evacuation', label: 'Evacuation Drill', icon: AlertCircle },
+  { id: 'visitor', label: 'Visitor Sign-in', icon: Users },
+  { id: 'privacy', label: 'Data Privacy Check', icon: Shield },
+  { id: 'cleaning', label: 'Cleaning/Sanitation', icon: Check },
+  { id: 'attendance', label: 'Attendance/Ratios', icon: Users }
+]
+
+function DailyTasks() {
+  const { dailyTasks, updateDailyTask, teacher, uploadPhoto } = useStore()
+  
+  const handleCheckboxChange = (taskId, checked) => {
+    updateDailyTask(taskId, { 
+      completed: checked,
+      completedAt: checked ? new Date().toISOString() : null
+    })
+  }
+  
+  const handleNoteChange = (taskId, note) => {
+    updateDailyTask(taskId, { note })
+  }
+  
+  const handleProtocolTest = (protocolId, result) => {
+    updateDailyTask(`protocol_${protocolId}`, {
+      tested: true,
+      result: result,
+      testedAt: new Date().toISOString()
+    })
+  }
+  
+  const handlePhotoUpload = async (taskId, event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    
+    const result = await uploadPhoto(file, taskId, 'daily')
+    if (result.success) {
+      // Photo URL is automatically added to the task by the store
+    }
+  }
+  
+  // Check if early start day (Tuesday/Thursday)
+  const isEarlyStartDay = () => {
+    const day = new Date().getDay()
+    return day === 2 || day === 4 // Tuesday or Thursday
+  }
+  
+  return (
+    <div className="space-y-6">
+      {/* Walk-Around Section */}
+      <div className="bg-white rounded-xl shadow-sm p-4">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <Users className="text-teddy-blue" size={20} />
+          Daily Walk-Around (1-2 hours)
+        </h2>
+        
+        {/* Site Coverage */}
+        <div className="space-y-3">
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={dailyTasks.rb3_visited?.completed || false}
+              onChange={(e) => handleCheckboxChange('rb3_visited', e.target.checked)}
+              className="checkbox-large mt-0.5"
+            />
+            <div className="flex-1">
+              <span className="font-medium">RB3 Site Visit</span>
+              <p className="text-sm text-gray-600">Quick hello in each room</p>
+            </div>
+          </label>
+          
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={dailyTasks.rb5_visited?.completed || false}
+              onChange={(e) => handleCheckboxChange('rb5_visited', e.target.checked)}
+              className="checkbox-large mt-0.5"
+            />
+            <div className="flex-1">
+              <span className="font-medium">RB5 Site Visit</span>
+              <p className="text-sm text-gray-600">Quick hello in each room</p>
+            </div>
+          </label>
+          
+          {isEarlyStartDay() && (
+            <label className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                checked={dailyTasks.early_start?.completed || false}
+                onChange={(e) => handleCheckboxChange('early_start', e.target.checked)}
+                className="checkbox-large mt-0.5"
+              />
+              <div className="flex-1">
+                <span className="font-medium text-teddy-orange">Early Start Completed</span>
+                <p className="text-sm text-gray-600">Tuesday/Thursday planning support</p>
+              </div>
+            </label>
+          )}
+        </div>
+      </div>
+      
+      {/* Communication & Support */}
+      <div className="bg-white rounded-xl shadow-sm p-4">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <MessageSquare className="text-teddy-green" size={20} />
+          Communication & Support
+        </h2>
+        
+        <div className="space-y-3">
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={dailyTasks.teacher_queries?.completed || false}
+              onChange={(e) => handleCheckboxChange('teacher_queries', e.target.checked)}
+              className="checkbox-large mt-0.5"
+            />
+            <div className="flex-1">
+              <span className="font-medium">Teacher Queries Addressed</span>
+              <textarea
+                placeholder="List queries and resolutions..."
+                value={dailyTasks.teacher_queries?.note || ''}
+                onChange={(e) => handleNoteChange('teacher_queries', e.target.value)}
+                className="mt-2 w-full px-3 py-2 border rounded-lg text-sm resize-none"
+                rows={2}
+              />
+            </div>
+          </label>
+          
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={dailyTasks.sofia_meral_updated?.completed || false}
+              onChange={(e) => handleCheckboxChange('sofia_meral_updated', e.target.checked)}
+              className="checkbox-large mt-0.5"
+            />
+            <div className="flex-1">
+              <span className="font-medium">Sofia/Meral Updated</span>
+              <p className="text-sm text-gray-600">Important info bridged</p>
+            </div>
+          </label>
+          
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={dailyTasks.trust_person?.completed || false}
+              onChange={(e) => handleCheckboxChange('trust_person', e.target.checked)}
+              className="checkbox-large mt-0.5"
+            />
+            <div className="flex-1">
+              <span className="font-medium">Trust Person Duty</span>
+              <p className="text-sm text-gray-600">Available for confidential matters</p>
+              {dailyTasks.trust_person?.completed && (
+                <input
+                  type="number"
+                  placeholder="Cases handled (number only)"
+                  value={dailyTasks.trust_person?.cases || ''}
+                  onChange={(e) => updateDailyTask('trust_person', { cases: e.target.value })}
+                  className="mt-2 w-full px-3 py-2 border rounded-lg text-sm"
+                />
+              )}
+            </div>
+          </label>
+        </div>
+      </div>
+      
+      {/* Protocol Tests - Pick 1 Daily */}
+      <div className="bg-white rounded-xl shadow-sm p-4">
+        <h2 className="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <Shield className="text-teddy-red" size={20} />
+          Protocol Test (Pick 1 Today)
+        </h2>
+        <p className="text-sm text-gray-600 mb-4">Complete 3 different tests by Friday</p>
+        
+        <div className="grid gap-3">
+          {protocols.map(protocol => {
+            const taskKey = `protocol_${protocol.id}`
+            const isCompleted = dailyTasks[taskKey]?.tested
+            
+            return (
+              <div
+                key={protocol.id}
+                className={`border-2 rounded-lg p-3 transition-all ${
+                  isCompleted ? 'border-teddy-green bg-green-50' : 'border-gray-200'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <protocol.icon size={18} className={isCompleted ? 'text-teddy-green' : 'text-gray-400'} />
+                    <span className={`font-medium ${isCompleted ? 'text-teddy-green' : 'text-gray-700'}`}>
+                      {protocol.label}
+                    </span>
+                  </div>
+                  {isCompleted && <Check size={20} className="text-teddy-green" />}
+                </div>
+                
+                {!isCompleted && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleProtocolTest(protocol.id, 'pass')}
+                      className="flex-1 px-3 py-2 bg-green-500 text-white rounded-lg text-sm font-medium active:scale-95"
+                    >
+                      ✓ Pass
+                    </button>
+                    <button
+                      onClick={() => handleProtocolTest(protocol.id, 'needs_work')}
+                      className="flex-1 px-3 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium active:scale-95"
+                    >
+                      Needs Work
+                    </button>
+                  </div>
+                )}
+                
+                {isCompleted && (
+                  <div>
+                    <div className={`text-sm font-medium ${
+                      dailyTasks[taskKey]?.result === 'pass' ? 'text-green-600' : 'text-orange-600'
+                    }`}>
+                      Result: {dailyTasks[taskKey]?.result === 'pass' ? 'Passed ✓' : 'Needs Work'}
+                    </div>
+                    
+                    {dailyTasks[taskKey]?.result === 'needs_work' && (
+                      <textarea
+                        placeholder="Add notes about issues found..."
+                        value={dailyTasks[taskKey]?.note || ''}
+                        onChange={(e) => updateDailyTask(taskKey, { note: e.target.value })}
+                        className="mt-2 w-full px-3 py-2 border rounded-lg text-sm resize-none"
+                        rows={2}
+                      />
+                    )}
+                    
+                    {/* Photo Evidence */}
+                    <div className="mt-2">
+                      <label className="flex items-center gap-2 text-sm text-gray-600">
+                        <Camera size={16} />
+                        <span>Add Evidence Photo</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          capture="environment"
+                          onChange={(e) => handlePhotoUpload(taskKey, e)}
+                          className="hidden"
+                        />
+                      </label>
+                      {dailyTasks[taskKey]?.photoUrl && (
+                        <img 
+                          src={dailyTasks[taskKey].photoUrl} 
+                          alt="Evidence"
+                          className="mt-2 w-full h-32 object-cover rounded-lg"
+                        />
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+      
+      {/* General Notes */}
+      <div className="bg-white rounded-xl shadow-sm p-4">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <ClipboardList className="text-teddy-purple" size={20} />
+          Additional Notes
+        </h2>
+        <textarea
+          placeholder="Any other observations, immediate needs, or follow-ups..."
+          value={dailyTasks.general_notes?.note || ''}
+          onChange={(e) => handleNoteChange('general_notes', e.target.value)}
+          className="w-full px-3 py-2 border rounded-lg resize-none"
+          rows={4}
+        />
+      </div>
+      
+      {/* Progress Summary */}
+      <div className="bg-teddy-blue/10 rounded-xl p-4">
+        <div className="text-center">
+          <div className="text-2xl font-bold text-teddy-blue">
+            {Object.values(dailyTasks).filter(t => t.completed || t.tested).length}
+          </div>
+          <div className="text-sm text-gray-600 mt-1">
+            Tasks Completed Today
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default DailyTasks

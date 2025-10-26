@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    @apply antialiased;
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  input, textarea, select {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+}
+
+@layer components {
+  .safe-area-inset {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  .btn-primary {
+    @apply bg-teddy-red text-white px-6 py-3 rounded-xl font-semibold 
+           active:scale-95 transition-transform duration-150
+           shadow-lg active:shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold
+           active:scale-95 transition-transform duration-150;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 
+           focus:border-teddy-red focus:outline-none transition-colors;
+  }
+  
+  .checkbox-large {
+    @apply w-6 h-6 rounded-md border-2 border-gray-300 
+           checked:bg-teddy-green checked:border-teddy-green
+           focus:outline-none focus:ring-2 focus:ring-teddy-green/50;
+  }
+  
+  .tab-active {
+    @apply text-teddy-red border-b-2 border-teddy-red font-semibold;
+  }
+  
+  .tab-inactive {
+    @apply text-gray-500 border-b-2 border-transparent;
+  }
+
+  /* TeddyKids Button Design System */
+  .tk-btn-base {
+    @apply font-medium transition-all duration-200 cursor-pointer
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed
+           touch-manipulation select-none;
+  }
+
+  .tk-btn-round {
+    @apply tk-btn-base px-4 py-2 rounded-full text-sm
+           min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+
+  /* Pink buttons (Yes/Good options) */
+  .tk-btn-pink {
+    @apply tk-btn-round bg-pink-100 text-pink-600
+           hover:bg-pink-200 focus:ring-pink-500;
+  }
+
+  .tk-btn-pink-active {
+    @apply tk-btn-round bg-pink-500 text-white shadow-lg
+           transform scale-105 focus:ring-pink-500;
+  }
+
+  /* Blue buttons (No/Issues options) */
+  .tk-btn-blue {
+    @apply tk-btn-round bg-blue-100 text-blue-600
+           hover:bg-blue-200 focus:ring-blue-500;
+  }
+
+  .tk-btn-blue-active {
+    @apply tk-btn-round bg-blue-500 text-white shadow-lg
+           transform scale-105 focus:ring-blue-500;
+  }
+
+  /* Number buttons (1-5) */
+  .tk-btn-number {
+    @apply tk-btn-base w-12 h-12 rounded-full text-lg font-bold
+           bg-pink-100 text-pink-600 hover:bg-pink-200
+           focus:ring-pink-500 flex items-center justify-center;
+  }
+
+  .tk-btn-number-active {
+    @apply tk-btn-base w-12 h-12 rounded-full text-lg font-bold
+           bg-pink-500 text-white shadow-lg transform scale-110
+           focus:ring-pink-500 flex items-center justify-center;
+  }
+
+  /* "More" button */
+  .tk-btn-more {
+    @apply tk-btn-round bg-blue-100 text-blue-600
+           hover:bg-blue-200 focus:ring-blue-500;
+  }
+
+  .tk-btn-more-active {
+    @apply tk-btn-round bg-blue-500 text-white shadow-lg
+           transform scale-105 focus:ring-blue-500;
+  }
+
+  /* Protocol color buttons */
+  .tk-protocol-red {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-red-500;
+  }
+
+  .tk-protocol-red-active {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-red-500 text-white shadow-lg transform scale-105 focus:ring-red-500;
+  }
+
+  .tk-protocol-orange {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-orange-500;
+  }
+
+  .tk-protocol-orange-active {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-orange-500 text-white shadow-lg transform scale-105 focus:ring-orange-500;
+  }
+
+  .tk-protocol-yellow {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-yellow-500;
+  }
+
+  .tk-protocol-yellow-active {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-yellow-500 text-white shadow-lg transform scale-105 focus:ring-yellow-500;
+  }
+
+  .tk-protocol-green {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-green-500;
+  }
+
+  .tk-protocol-green-active {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-green-500 text-white shadow-lg transform scale-105 focus:ring-green-500;
+  }
+
+  .tk-protocol-blue {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-blue-500;
+  }
+
+  .tk-protocol-blue-active {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-blue-500 text-white shadow-lg transform scale-105 focus:ring-blue-500;
+  }
+
+  .tk-protocol-purple {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-purple-500;
+  }
+
+  .tk-protocol-purple-active {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-purple-500 text-white shadow-lg transform scale-105 focus:ring-purple-500;
+  }
+
+  .tk-protocol-gray {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-500;
+  }
+
+  .tk-protocol-gray-active {
+    @apply tk-btn-base p-3 rounded-lg text-sm font-medium text-left
+           bg-gray-600 text-white shadow-lg transform scale-105 focus:ring-gray-500;
+  }
+}
+
+/* Loading spinner */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Smooth scrolling */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
