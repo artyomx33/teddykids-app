@@ -15,6 +15,7 @@ const useStore = create(
       dailyTasks: {},
       weeklyTasks: {},
       monthlyTasks: {},
+      eventsData: {},
 
       // Date management
       isDateLocked: false,
@@ -58,12 +59,13 @@ const useStore = create(
       },
       
       logout: () => {
-        set({ 
-          teacher: null, 
+        set({
+          teacher: null,
           isAuthenticated: false,
           dailyTasks: {},
           weeklyTasks: {},
-          monthlyTasks: {}
+          monthlyTasks: {},
+          eventsData: {}
         })
       },
       
@@ -100,6 +102,19 @@ const useStore = create(
             ...state.monthlyTasks,
             [taskId]: {
               ...state.monthlyTasks[taskId],
+              ...value,
+              updatedAt: new Date().toISOString()
+            }
+          }
+        }))
+      },
+
+      updateEventsTask: (taskId, value) => {
+        set(state => ({
+          eventsData: {
+            ...state.eventsData,
+            [taskId]: {
+              ...state.eventsData[taskId],
               ...value,
               updatedAt: new Date().toISOString()
             }
@@ -156,6 +171,19 @@ const useStore = create(
               onConflict: 'teacher_id,report_date,report_type'
             })
           }
+
+          // Save events report (if any data)
+          if (Object.keys(state.eventsData).length > 0) {
+            await supabase.from('reports').upsert({
+              teacher_id: state.teacher.id,
+              month: month,
+              report_type: 'events',
+              report_date: reportDate,
+              data: state.eventsData
+            }, {
+              onConflict: 'teacher_id,report_date,report_type'
+            })
+          }
           
           set({ 
             isSaving: false, 
@@ -186,11 +214,13 @@ const useStore = create(
             const daily = data.find(r => r.report_type === 'daily')
             const weekly = data.find(r => r.report_type === 'weekly')
             const monthly = data.find(r => r.report_type === 'monthly')
-            
+            const events = data.find(r => r.report_type === 'events')
+
             set({
               dailyTasks: daily?.data || {},
               weeklyTasks: weekly?.data || {},
-              monthlyTasks: monthly?.data || {}
+              monthlyTasks: monthly?.data || {},
+              eventsData: events?.data || {}
             })
           }
         } catch (err) {
@@ -221,6 +251,7 @@ const useStore = create(
           set({
             currentDate: now,
             dailyTasks: {}, // Clear daily tasks for new day
+            // Keep weekly, monthly, and events data as they span longer periods
             isDateLocked: false,
             lastDateCheck: now
           })
@@ -280,12 +311,17 @@ const useStore = create(
           
           // Update the relevant task with the photo URL
           if (reportType === 'daily') {
-            state.updateDailyTask(taskId, { 
+            state.updateDailyTask(taskId, {
               photoUrl: publicUrl,
               photoPath: fileName
             })
           } else if (reportType === 'weekly') {
-            state.updateWeeklyTask(taskId, { 
+            state.updateWeeklyTask(taskId, {
+              photoUrl: publicUrl,
+              photoPath: fileName
+            })
+          } else if (reportType === 'events') {
+            state.updateEventsTask(taskId, {
               photoUrl: publicUrl,
               photoPath: fileName
             })

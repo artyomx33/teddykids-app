@@ -3,7 +3,8 @@ import useStore from '../lib/store'
 import DailyTasks from './DailyTasks'
 import WeeklyTasks from './WeeklyTasks'
 import MonthlyTasks from './MonthlyTasks'
-import { Calendar, Save, LogOut, CheckCircle, Clock } from 'lucide-react'
+import EventsAndCelebrations from './EventsAndCelebrations'
+import { Calendar, Save, LogOut, CheckCircle, Clock, Sparkles } from 'lucide-react'
 import { format } from 'date-fns'
 
 function Dashboard() {
@@ -33,7 +34,8 @@ function Dashboard() {
   const tabs = [
     { id: 'daily', label: 'Daily', icon: Calendar },
     { id: 'weekly', label: 'Weekly', icon: Calendar },
-    { id: 'monthly', label: 'Monthly', icon: Calendar }
+    { id: 'monthly', label: 'Monthly', icon: Calendar },
+    { id: 'events', label: 'Events', icon: Sparkles }
   ]
   
   return (
@@ -127,6 +129,7 @@ function Dashboard() {
         {activeTab === 'daily' && <DailyTasks canEdit={canEditToday()} />}
         {activeTab === 'weekly' && <WeeklyTasks canEdit={canEditToday()} />}
         {activeTab === 'monthly' && <MonthlyTasks canEdit={canEditToday()} />}
+        {activeTab === 'events' && <EventsAndCelebrations canEdit={canEditToday()} />}
       </main>
       
       {/* Fixed Save Button */}
