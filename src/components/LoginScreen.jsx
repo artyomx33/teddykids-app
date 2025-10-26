@@ -61,7 +61,7 @@ function LoginScreen() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-teddy-orange/20 to-teddy-red/20 safe-area-inset">
       <div className="flex flex-col items-center justify-center min-h-screen px-6 py-12">
-        {/* Logo/Title */}
+        {/* Logo */}
         <div className="text-center mb-8 animate-fade-in">
           <div className="w-24 h-24 mx-auto mb-4">
             <img
@@ -70,16 +70,10 @@ function LoginScreen() {
               className="w-full h-full object-contain"
             />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800">TeddyKids</h1>
-          <p className="text-gray-600 mt-1">Teacher Reporting</p>
         </div>
         
         {/* Teacher Selection */}
         <div className="w-full max-w-sm mb-6 animate-slide-up">
-          <label className="flex items-center gap-2 text-gray-700 font-medium mb-3">
-            <User size={20} />
-            Select Your Name
-          </label>
           <div className="grid grid-cols-2 gap-3">
             {teachers.map(teacher => (
               <button
@@ -100,17 +94,14 @@ function LoginScreen() {
         
         {/* PIN Display */}
         <div className="w-full max-w-sm mb-6">
-          <label className="flex items-center gap-2 text-gray-700 font-medium mb-3">
-            <Lock size={20} />
-            Enter Your PIN
-          </label>
-          <div className="flex justify-center gap-3 mb-4">
+          <div className="flex justify-center items-center gap-3 mb-4">
+            <Lock size={24} className="text-gray-600" />
             {[0, 1, 2, 3].map(i => (
               <div
                 key={i}
                 className={`w-14 h-14 rounded-xl border-2 flex items-center justify-center text-2xl font-bold transition-all ${
-                  pin[i] 
-                    ? 'bg-teddy-red text-white border-teddy-red scale-110' 
+                  pin[i]
+                    ? 'bg-teddy-red text-white border-teddy-red scale-110'
                     : 'bg-white border-gray-300'
                 }`}
               >
