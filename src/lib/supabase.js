@@ -41,7 +41,9 @@ CREATE TABLE evidence (
 
 -- Insert sample teachers
 INSERT INTO teachers (name, pin, sites) VALUES
-  ('Hanrike', 'XXXX', ARRAY['RB3', 'RB5']),
-  ('Sofia', 'XXXX', ARRAY['RB3']),
-  ('Meral', 'XXXX', ARRAY['RB5']);
+  ('Adela', '1470', ARRAY['RB3', 'RB5']),
+  ('Christina', '1236', ARRAY['RB3']),
+  ('Hanrike', '7896', ARRAY['RB3', 'RB5']),
+  ('Meral', '2580', ARRAY['RB5']),
+  ('Sofia', '0852', ARRAY['RB3']);
 */
